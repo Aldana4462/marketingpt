@@ -109,6 +109,41 @@
       box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.15);
     }
 
+    .help-panel {
+      border: 3px dashed rgba(122, 75, 53, 0.5);
+      border-radius: 18px;
+      padding: 18px 22px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      background: rgba(255, 255, 255, 0.35);
+      box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.35);
+      transition: max-height 0.4s ease, opacity 0.3s ease;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+    }
+
+    .help-panel.visible {
+      max-height: 320px;
+      opacity: 1;
+    }
+
+    .help-panel h2 {
+      margin-top: 0;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .help-panel ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .help-panel li + li {
+      margin-top: 6px;
+    }
+
     button:active {
       transform: translateY(2px);
       box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1);
@@ -217,13 +252,29 @@
       <label for="coffeeRange">Nivel de café</label>
       <input id="coffeeRange" type="range" min="0" max="100" value="0" />
       <div class="button-row">
+        <button
+          id="helpButton"
+          type="button"
+          aria-expanded="false"
+          aria-controls="helpPanel"
+        >¿Cómo interactuar?</button>
         <button id="previewButton" type="button">Previsualizar</button>
         <button id="fillButton" type="button">Llenar Gradualmente</button>
         <button id="milkButton" type="button">Añadir Leche</button>
       </div>
     </div>
 
-    <p id="readout" class="readout">Taza vacía.</p>
+    <aside id="helpPanel" class="help-panel" aria-live="polite" aria-hidden="true">
+      <h2>Guía rápida</h2>
+      <ul>
+        <li>Arrastra la barra “Nivel de café” para llenar o vaciar la taza manualmente.</li>
+        <li>Usa “Añadir Leche” para alternar la capa cremosa cuando quieras un latte espumoso.</li>
+        <li>El botón “Llenar Gradualmente” completa la taza hasta arriba con una animación suave.</li>
+        <li>Si prefieres ver todo el flujo automáticamente, pulsa “Previsualizar”.</li>
+      </ul>
+    </aside>
+
+    <p id="readout" class="readout">Arrastra la barra o prueba los botones retro.</p>
   </main>
 
   <script>
@@ -234,6 +285,8 @@
     const previewButton = document.getElementById('previewButton');
     const readout = document.getElementById('readout');
     const foam = document.getElementById('foam');
+    const helpButton = document.getElementById('helpButton');
+    const helpPanel = document.getElementById('helpPanel');
 
     let milkAdded = false;
     let animationFrame = null;
@@ -251,7 +304,7 @@
       }
 
       if (height === 0) {
-        readout.textContent = 'Taza vacía.';
+        readout.textContent = 'Taza vacía. Usa los controles para animarla.';
       } else if (height < 35) {
         readout.textContent = 'Un sorbo de energía.';
       } else if (height < 70) {
@@ -304,6 +357,14 @@
     coffeeRange.addEventListener('input', (event) => {
       cancelAnimationFrame(animationFrame);
       updateFillHeight(event.target.value);
+    });
+
+    helpButton.addEventListener('click', () => {
+      const willShow = !helpPanel.classList.contains('visible');
+      helpPanel.classList.toggle('visible', willShow);
+      helpPanel.setAttribute('aria-hidden', willShow ? 'false' : 'true');
+      helpButton.textContent = willShow ? 'Ocultar guía' : '¿Cómo interactuar?';
+      helpButton.setAttribute('aria-expanded', willShow ? 'true' : 'false');
     });
 
     milkButton.addEventListener('click', () => {
