@@ -90,11 +90,13 @@
 
     .button-row {
       display: flex;
+      flex-wrap: wrap;
       gap: 16px;
+      justify-content: center;
     }
 
     button {
-      flex: 1;
+      flex: 1 1 160px;
       padding: 12px 18px;
       border: 3px solid var(--accent-color);
       background: var(--bg-color);
@@ -215,6 +217,7 @@
       <label for="coffeeRange">Nivel de café</label>
       <input id="coffeeRange" type="range" min="0" max="100" value="0" />
       <div class="button-row">
+        <button id="previewButton" type="button">Previsualizar</button>
         <button id="fillButton" type="button">Llenar Gradualmente</button>
         <button id="milkButton" type="button">Añadir Leche</button>
       </div>
@@ -228,6 +231,7 @@
     const fill = document.getElementById('coffeeFill');
     const milkButton = document.getElementById('milkButton');
     const fillButton = document.getElementById('fillButton');
+    const previewButton = document.getElementById('previewButton');
     const readout = document.getElementById('readout');
     const foam = document.getElementById('foam');
 
@@ -259,27 +263,21 @@
       }
     }
 
-    coffeeRange.addEventListener('input', (event) => {
-      cancelAnimationFrame(animationFrame);
-      updateFillHeight(event.target.value);
-    });
-
-    milkButton.addEventListener('click', () => {
-      milkAdded = !milkAdded;
+    function setMilkState(state) {
+      milkAdded = state;
       milkButton.textContent = milkAdded ? 'Quitar Leche' : 'Añadir Leche';
       fill.classList.toggle('milk-on', milkAdded);
+
       if (milkAdded && parseFloat(coffeeRange.value) > 10) {
         foam.classList.add('visible');
       } else {
         foam.classList.remove('visible');
       }
-    });
+    }
 
-    fillButton.addEventListener('click', () => {
+    function animateFillTo(target, duration = 2400, onComplete) {
       cancelAnimationFrame(animationFrame);
       const start = parseFloat(coffeeRange.value);
-      const target = 100;
-      const duration = 2400;
       const startTime = performance.now();
 
       function animateFill(now) {
@@ -292,10 +290,42 @@
 
         if (progress < 1) {
           animationFrame = requestAnimationFrame(animateFill);
+        } else {
+          animationFrame = null;
+          if (typeof onComplete === 'function') {
+            onComplete();
+          }
         }
       }
 
       animationFrame = requestAnimationFrame(animateFill);
+    }
+
+    coffeeRange.addEventListener('input', (event) => {
+      cancelAnimationFrame(animationFrame);
+      updateFillHeight(event.target.value);
+    });
+
+    milkButton.addEventListener('click', () => {
+      setMilkState(!milkAdded);
+    });
+
+    fillButton.addEventListener('click', () => {
+      animateFillTo(100);
+    });
+
+    previewButton.addEventListener('click', () => {
+      cancelAnimationFrame(animationFrame);
+      setMilkState(false);
+      coffeeRange.value = 0;
+      updateFillHeight(0);
+
+      animateFillTo(70, 2000, () => {
+        setTimeout(() => {
+          setMilkState(true);
+          animateFillTo(85, 900);
+        }, 250);
+      });
     });
 
     updateFillHeight(0);
