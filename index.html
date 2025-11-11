@@ -15,6 +15,12 @@
       --slider-track: #c78d6a;
       --slider-thumb: #7a4b35;
       --font: 'Courier New', Courier, monospace;
+      --wall-top: #3c1f16;
+      --wall-bottom: #1d100b;
+      --counter-color: #4d2c1a;
+      --counter-edge: #2f1b11;
+      --neon: #ffb27b;
+      --steam-color: rgba(255, 255, 255, 0.7);
     }
 
     * {
@@ -27,10 +33,38 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--bg-color);
+      position: relative;
+      background: linear-gradient(180deg, var(--wall-top) 0%, rgba(60, 31, 22, 0.9) 45%, rgba(36, 18, 13, 0.9) 60%, var(--wall-bottom) 100%);
       color: var(--accent-color);
       font-family: var(--font);
       letter-spacing: 0.04em;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 18% 20%, rgba(255, 215, 180, 0.45), transparent 50%),
+        radial-gradient(circle at 78% 26%, rgba(255, 189, 140, 0.35), transparent 52%),
+        linear-gradient(180deg, transparent 70%, rgba(20, 12, 8, 0.65));
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(180deg, transparent 0%, rgba(16, 8, 5, 0.2) 35%, rgba(16, 8, 5, 0.68) 100%),
+        linear-gradient(115deg, rgba(90, 48, 30, 0.45) 0%, transparent 42%),
+        linear-gradient(250deg, rgba(60, 32, 18, 0.38) 0%, transparent 48%),
+        repeating-linear-gradient(90deg, rgba(41, 22, 14, 0.35) 0 12px, transparent 12px 26px);
+      mix-blend-mode: soft-light;
+      pointer-events: none;
+      z-index: 0;
     }
 
     .machine {
@@ -40,6 +74,8 @@
       padding: 32px;
       width: min(92vw, 640px);
       box-shadow: 0 16px 0 rgba(122, 75, 53, 0.2);
+      position: relative;
+      z-index: 1;
     }
 
     h1 {
@@ -151,83 +187,319 @@
 
     .display {
       position: relative;
-      height: 280px;
+      height: 320px;
       margin-inline: auto;
-      width: 220px;
+      width: 260px;
       border: 5px solid var(--glass-stroke);
-      border-radius: 24px 24px 32px 32px;
-      padding: 16px;
-      background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.3), transparent 55%);
-      box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.15);
+      border-radius: 28px 28px 38px 38px;
+      padding: 18px 18px 28px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, rgba(34, 19, 13, 0.45) 100%);
+      box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.18);
+      overflow: hidden;
+    }
+
+    .display::after {
+      content: "CAFÉ CENTRAL";
+      position: absolute;
+      top: 16px;
+      right: 18px;
+      font-size: 0.65rem;
+      letter-spacing: 0.28em;
+      color: var(--neon);
+      text-shadow: 0 0 6px rgba(255, 178, 123, 0.6);
+    }
+
+    .cup-scene {
+      position: relative;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .cup-scene::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(24, 12, 8, 0.55) 0%, rgba(24, 12, 8, 0.15) 48%, rgba(24, 12, 8, 0.6) 100%),
+        repeating-linear-gradient(90deg, rgba(255, 214, 170, 0.18) 0 24px, transparent 24px 48px);
+      opacity: 0.35;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .steam {
+      position: absolute;
+      top: 36px;
+      display: grid;
+      gap: 8px;
+      justify-items: center;
+      z-index: 2;
+    }
+
+    .steam span {
+      width: 6px;
+      height: 40px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--steam-color) 0%, transparent 85%);
+      animation: floatSteam 4s ease-in-out infinite;
+      filter: blur(0.6px);
+    }
+
+    .steam span:nth-child(2) {
+      animation-delay: 0.8s;
+      transform: translateX(10px) scaleY(1.1);
+    }
+
+    .steam span:nth-child(3) {
+      animation-delay: 1.4s;
+      transform: translateX(-12px) scaleY(0.9);
     }
 
     .cup {
       position: relative;
-      width: 100%;
-      height: 100%;
-      border: 4px solid rgba(255, 255, 255, 0.35);
-      border-bottom-width: 8px;
-      border-radius: 24px 24px 20px 20px;
+      width: 160px;
+      height: 200px;
+      border: 4px solid rgba(255, 255, 255, 0.45);
+      border-bottom-width: 10px;
+      border-radius: 28px 28px 20px 20px;
       overflow: hidden;
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(1px);
-    }
-
-    .cup::before,
-    .cup::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.05) 45%, rgba(255, 255, 255, 0.15) 100%);
+      backdrop-filter: blur(1.5px);
+      box-shadow: inset 0 -6px 12px rgba(0, 0, 0, 0.15);
+      z-index: 1;
     }
 
     .cup::before {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0%, transparent 45%);
-      mix-blend-mode: screen;
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border-radius: 20px 20px 16px 16px;
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      pointer-events: none;
     }
 
     .cup::after {
-      top: 20px;
-      left: 100%;
-      width: 70px;
-      height: 120px;
-      border: 6px solid rgba(255, 255, 255, 0.35);
-      border-left: none;
-      border-radius: 0 60px 60px 0;
-      transform: translateX(-20px);
-      background: rgba(255, 255, 255, 0.08);
+      content: "";
+      position: absolute;
+      top: 32px;
+      right: -72px;
+      width: 120px;
+      height: 110px;
+      border: 10px solid rgba(255, 255, 255, 0.35);
+      border-left: 12px solid transparent;
+      border-radius: 0 80px 80px 0;
+      backdrop-filter: blur(1px);
+      transform: translateX(-6px);
+      box-shadow: inset -4px 0 8px rgba(255, 255, 255, 0.25);
     }
 
-    .fill {
+    .liquid {
       position: absolute;
-      bottom: 0;
       left: 0;
       width: 100%;
-      height: 0%;
-      background: linear-gradient(180deg, rgba(173, 90, 53, 0.8) 0%, var(--coffee-color) 80%);
-      transition: height 0.4s ease;
+      height: 0;
+      transition: height 0.35s ease, bottom 0.35s ease;
+      will-change: height, bottom;
     }
 
-    .fill.milk-on {
-      background: linear-gradient(180deg, var(--milk-color) 0%, rgba(199, 158, 119, 0.7) 30%, var(--coffee-color) 90%);
+    .liquid.coffee {
+      bottom: 0;
+      background: linear-gradient(180deg, rgba(173, 90, 53, 0.85) 0%, var(--coffee-color) 75%, rgba(44, 18, 10, 0.9) 100%);
+      box-shadow: inset 0 -8px 16px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+    }
+
+    .liquid.milk {
+      bottom: 0;
+      background: linear-gradient(180deg, rgba(255, 250, 242, 0.92) 0%, rgba(245, 220, 189, 0.82) 60%, rgba(212, 164, 119, 0.7) 100%);
+      mix-blend-mode: screen;
+      opacity: 0.95;
+      border-top: 2px solid rgba(255, 255, 255, 0.65);
+      z-index: 2;
     }
 
     .foam {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      bottom: calc(var(--fill-height, 0%) + 10px);
-      width: 80%;
-      height: 26px;
+      bottom: 12px;
+      width: 110px;
+      height: 28px;
       border-radius: 999px;
-      background: rgba(255, 248, 240, 0.9);
+      background: rgba(255, 248, 240, 0.92);
       opacity: 0;
-      transition: opacity 0.3s ease, bottom 0.4s ease;
-      box-shadow: 0 6px 12px rgba(122, 75, 53, 0.15);
+      transition: opacity 0.3s ease, bottom 0.35s ease;
+      box-shadow: 0 8px 18px rgba(122, 75, 53, 0.18);
+      z-index: 3;
     }
 
     .foam.visible {
       opacity: 1;
+    }
+
+    .saucer {
+      position: absolute;
+      bottom: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 220px;
+      height: 28px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.55) 0%, rgba(215, 195, 180, 0.4) 35%, rgba(122, 94, 76, 0.35) 100%);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.4);
+      z-index: 0;
+    }
+
+    .counter {
+      position: absolute;
+      bottom: -48px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 320px;
+      height: 60px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(133, 78, 45, 0.9) 0%, rgba(78, 40, 22, 0.95) 60%, rgba(55, 28, 15, 0.98) 100%);
+      box-shadow: inset 0 8px 0 rgba(255, 255, 255, 0.12), inset 0 -6px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    @keyframes floatSteam {
+      0% {
+        opacity: 0;
+        transform: translateY(8px) scale(0.9);
+      }
+      25% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-38px) scale(1.1);
+      }
+    }
+
+    .knob-group {
+      display: grid;
+      gap: 14px;
+      justify-items: center;
+      padding: 18px;
+      border: 3px solid rgba(122, 75, 53, 0.35);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.45);
+      box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.35);
+    }
+
+    .knob-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.85rem;
+    }
+
+    .knob-header output {
+      font-size: 1.1rem;
+      font-weight: bold;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.85);
+      border: 2px solid rgba(122, 75, 53, 0.35);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .knob-header output.limited {
+      color: #7a0f0f;
+      border-color: rgba(173, 35, 35, 0.6);
+      background: rgba(255, 234, 230, 0.95);
+    }
+
+    .knob-wrapper {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      display: grid;
+      place-items: center;
+    }
+
+    .knob-wrapper::before {
+      content: "";
+      position: absolute;
+      inset: 6px;
+      border-radius: 50%;
+      border: 2px dashed rgba(122, 75, 53, 0.25);
+      box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.25);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .knob-wrapper::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 6px;
+      height: 46px;
+      border-radius: 6px;
+      background: var(--accent-color);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+      transform-origin: bottom center;
+      transform: translate(-50%, 10%) rotate(calc(-135deg + var(--knob-angle, 0deg)));
+      transition: transform 0.2s ease;
+      z-index: 1;
+    }
+
+    .milk-knob {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 6px solid rgba(122, 75, 53, 0.45);
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.92) 0%, rgba(255, 249, 240, 0.6) 48%, rgba(122, 75, 53, 0.15) 100%),
+        conic-gradient(from -135deg, var(--slider-track) 0deg, var(--slider-track) var(--angle, 0deg), rgba(255, 255, 255, 0.15) var(--angle, 0deg), rgba(255, 255, 255, 0.15) 360deg);
+      cursor: pointer;
+      box-shadow: inset 0 6px 12px rgba(0, 0, 0, 0.2);
+      transform: rotate(-135deg);
+      touch-action: none;
+    }
+
+    .milk-knob:focus {
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.65), inset 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .milk-knob::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--neon);
+      border: 4px solid var(--accent-color);
+      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.4);
+    }
+
+    .milk-knob::-moz-range-thumb {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--neon);
+      border: 4px solid var(--accent-color);
+      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.4);
+    }
+
+    .knob-hint {
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.75rem;
+      color: rgba(122, 75, 53, 0.8);
+      text-align: center;
     }
 
     .readout {
@@ -242,15 +514,45 @@
   <main class="machine">
     <h1>Barra Retro Cafetera</h1>
     <section class="display" aria-live="polite">
-      <div class="cup">
-        <div id="coffeeFill" class="fill"></div>
-        <div id="foam" class="foam"></div>
+      <div class="cup-scene">
+        <div class="steam" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="cup">
+          <div id="coffeeLayer" class="liquid coffee"></div>
+          <div id="milkLayer" class="liquid milk"></div>
+          <div id="foam" class="foam"></div>
+        </div>
+        <div class="saucer" aria-hidden="true"></div>
+        <div class="counter" aria-hidden="true"></div>
       </div>
     </section>
 
     <div class="controls">
       <label for="coffeeRange">Nivel de café</label>
       <input id="coffeeRange" type="range" min="0" max="100" value="0" />
+
+      <div class="knob-group" role="group" aria-labelledby="milkKnobLabel">
+        <div class="knob-header">
+          <span id="milkKnobLabel">Perilla de leche</span>
+          <output id="milkOutput" for="milkKnob" aria-live="polite">0%</output>
+        </div>
+        <div class="knob-wrapper" id="milkKnobWrapper">
+          <input
+            id="milkKnob"
+            class="milk-knob"
+            type="range"
+            min="0"
+            max="40"
+            value="0"
+            aria-label="Cantidad de leche"
+          />
+        </div>
+        <p class="knob-hint">Gira para dosificar la espuma perfecta.</p>
+      </div>
+
       <div class="button-row">
         <button
           id="helpButton"
@@ -260,27 +562,30 @@
         >¿Cómo interactuar?</button>
         <button id="previewButton" type="button">Previsualizar</button>
         <button id="fillButton" type="button">Llenar Gradualmente</button>
-        <button id="milkButton" type="button">Añadir Leche</button>
       </div>
     </div>
 
     <aside id="helpPanel" class="help-panel" aria-live="polite" aria-hidden="true">
       <h2>Guía rápida</h2>
       <ul>
-        <li>Arrastra la barra “Nivel de café” para llenar o vaciar la taza manualmente.</li>
-        <li>Usa “Añadir Leche” para alternar la capa cremosa cuando quieras un latte espumoso.</li>
-        <li>El botón “Llenar Gradualmente” completa la taza hasta arriba con una animación suave.</li>
+        <li>Arrastra la barra “Nivel de café” para dosificar el espresso base.</li>
+        <li>Gira la perilla de leche para añadir la crema en la medida exacta.</li>
+        <li>Consulta el indicador junto a la perilla: muestra el porcentaje real de leche en la taza.</li>
+        <li>El botón “Llenar Gradualmente” prepara una taza completa con leche incorporada.</li>
         <li>Si prefieres ver todo el flujo automáticamente, pulsa “Previsualizar”.</li>
       </ul>
     </aside>
 
-    <p id="readout" class="readout">Arrastra la barra o prueba los botones retro.</p>
+    <p id="readout" class="readout">Ajusta el nivel de café y gira la perilla para tu mezcla ideal.</p>
   </main>
 
   <script>
     const coffeeRange = document.getElementById('coffeeRange');
-    const fill = document.getElementById('coffeeFill');
-    const milkButton = document.getElementById('milkButton');
+    const coffeeLayer = document.getElementById('coffeeLayer');
+    const milkLayer = document.getElementById('milkLayer');
+    const milkKnob = document.getElementById('milkKnob');
+    const milkKnobWrapper = document.getElementById('milkKnobWrapper');
+    const milkOutput = document.getElementById('milkOutput');
     const fillButton = document.getElementById('fillButton');
     const previewButton = document.getElementById('previewButton');
     const readout = document.getElementById('readout');
@@ -288,75 +593,196 @@
     const helpButton = document.getElementById('helpButton');
     const helpPanel = document.getElementById('helpPanel');
 
-    let milkAdded = false;
-    let animationFrame = null;
+    const milkMax = Number.parseFloat(milkKnob.max) || 1;
+    let coffeeAnimationFrame = null;
+    let milkAnimationFrame = null;
+    const pendingTimeouts = [];
 
-    function updateFillHeight(value) {
-      const height = Math.max(0, Math.min(100, value));
-      fill.style.height = `${height}%`;
-      fill.style.setProperty('--fill-height', `${height}%`);
-      foam.style.setProperty('--fill-height', `${height}%`);
+    function clamp(value, min = 0, max = 100) {
+      const number = Number.parseFloat(value);
+      if (Number.isNaN(number)) {
+        return min;
+      }
+      return Math.min(Math.max(number, min), max);
+    }
 
-      if (milkAdded && height > 10) {
+    function queueTimeout(callback, delay) {
+      const id = setTimeout(() => {
+        const index = pendingTimeouts.indexOf(id);
+        if (index !== -1) {
+          pendingTimeouts.splice(index, 1);
+        }
+        callback();
+      }, delay);
+      pendingTimeouts.push(id);
+      return id;
+    }
+
+    function clearPendingTimeouts() {
+      while (pendingTimeouts.length) {
+        clearTimeout(pendingTimeouts.pop());
+      }
+    }
+
+    function cancelAnimations() {
+      if (coffeeAnimationFrame) {
+        cancelAnimationFrame(coffeeAnimationFrame);
+        coffeeAnimationFrame = null;
+      }
+      if (milkAnimationFrame) {
+        cancelAnimationFrame(milkAnimationFrame);
+        milkAnimationFrame = null;
+      }
+      clearPendingTimeouts();
+    }
+
+    function updateKnobVisual(value = Number.parseFloat(milkKnob.value) || 0) {
+      const safeMax = milkMax === 0 ? 1 : milkMax;
+      const numericValue = Number.parseFloat(value) || 0;
+      const angle = (numericValue / safeMax) * 270;
+      milkKnob.style.setProperty('--angle', `${angle}deg`);
+      milkKnobWrapper.style.setProperty('--knob-angle', `${angle}deg`);
+    }
+
+    function updateLiquids() {
+      const coffeeValue = clamp(coffeeRange.value, 0, 100);
+      const requestedMilk = clamp(milkKnob.value, 0, milkMax);
+      const availableSpace = Math.max(0, 100 - coffeeValue);
+      const actualMilk = Math.min(requestedMilk, availableSpace);
+      const total = Math.min(100, coffeeValue + actualMilk);
+      const saturated = requestedMilk > availableSpace + 0.01;
+
+      coffeeLayer.style.height = `${coffeeValue}%`;
+      milkLayer.style.height = `${actualMilk}%`;
+      milkLayer.style.bottom = `${coffeeValue}%`;
+      foam.style.bottom = `calc(${total}% + 10px)`;
+
+      if (actualMilk > 2 && total > 15) {
         foam.classList.add('visible');
       } else {
         foam.classList.remove('visible');
       }
 
-      if (height === 0) {
-        readout.textContent = 'Taza vacía. Usa los controles para animarla.';
-      } else if (height < 35) {
-        readout.textContent = 'Un sorbo de energía.';
-      } else if (height < 70) {
-        readout.textContent = 'Media taza lista.';
-      } else if (height < 100) {
-        readout.textContent = 'Casi al tope, ¡cuidado!';
+      milkOutput.textContent = `${Math.round(actualMilk)}%`;
+      milkOutput.classList.toggle('limited', saturated);
+      milkOutput.setAttribute(
+        'title',
+        saturated
+          ? 'No cabe más leche: libera espacio o reduce el espresso.'
+          : 'Porcentaje de leche servida en la taza.'
+      );
+
+      updateReadout(total, actualMilk, saturated);
+    }
+
+    function updateReadout(total, milk, saturated) {
+      if (total === 0) {
+        readout.textContent = 'Taza vacía. Ajusta el café y la perilla de leche.';
+        return;
+      }
+
+      if (saturated) {
+        readout.textContent = 'La taza no admite más leche: sirve un sorbo o baja el café.';
+        return;
+      }
+
+      if (milk === 0) {
+        if (total < 35) {
+          readout.textContent = 'Café negro para un arranque suave.';
+        } else if (total < 70) {
+          readout.textContent = 'Media taza de espresso intenso lista.';
+        } else if (total < 100) {
+          readout.textContent = 'Café oscuro casi a rebosar.';
+        } else {
+          readout.textContent = 'Café cargado hasta el borde.';
+        }
+        return;
+      }
+
+      const milkRatio = milk / total;
+
+      if (milkRatio < 0.2) {
+        readout.textContent = 'Un toque cremoso que suaviza el espresso.';
+      } else if (milkRatio < 0.45) {
+        readout.textContent = 'Latte equilibrado con espuma sedosa.';
+      } else if (milkRatio < 0.75) {
+        readout.textContent = 'Capuccino generoso listo para la barra.';
       } else {
-        readout.textContent = 'Taza llena al máximo.';
+        readout.textContent = 'Taza muy láctea, perfecta para algo dulce.';
       }
     }
 
-    function setMilkState(state) {
-      milkAdded = state;
-      milkButton.textContent = milkAdded ? 'Quitar Leche' : 'Añadir Leche';
-      fill.classList.toggle('milk-on', milkAdded);
-
-      if (milkAdded && parseFloat(coffeeRange.value) > 10) {
-        foam.classList.add('visible');
-      } else {
-        foam.classList.remove('visible');
+    function animateCoffeeTo(target, duration = 2400, onComplete) {
+      if (coffeeAnimationFrame) {
+        cancelAnimationFrame(coffeeAnimationFrame);
       }
-    }
 
-    function animateFillTo(target, duration = 2400, onComplete) {
-      cancelAnimationFrame(animationFrame);
-      const start = parseFloat(coffeeRange.value);
+      const start = Number.parseFloat(coffeeRange.value) || 0;
+      const targetValue = clamp(target, 0, 100);
       const startTime = performance.now();
 
-      function animateFill(now) {
+      function step(now) {
         const elapsed = now - startTime;
         const progress = Math.min(elapsed / duration, 1);
         const eased = 1 - Math.pow(1 - progress, 3);
-        const value = start + (target - start) * eased;
+        const value = start + (targetValue - start) * eased;
         coffeeRange.value = value;
-        updateFillHeight(value);
+        updateLiquids();
 
         if (progress < 1) {
-          animationFrame = requestAnimationFrame(animateFill);
+          coffeeAnimationFrame = requestAnimationFrame(step);
         } else {
-          animationFrame = null;
+          coffeeAnimationFrame = null;
           if (typeof onComplete === 'function') {
             onComplete();
           }
         }
       }
 
-      animationFrame = requestAnimationFrame(animateFill);
+      coffeeAnimationFrame = requestAnimationFrame(step);
+    }
+
+    function animateMilkTo(target, duration = 1400, onComplete) {
+      if (milkAnimationFrame) {
+        cancelAnimationFrame(milkAnimationFrame);
+      }
+
+      const start = Number.parseFloat(milkKnob.value) || 0;
+      const targetValue = clamp(target, 0, milkMax);
+      const startTime = performance.now();
+
+      function step(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const value = start + (targetValue - start) * eased;
+        milkKnob.value = value;
+        updateKnobVisual(value);
+        updateLiquids();
+
+        if (progress < 1) {
+          milkAnimationFrame = requestAnimationFrame(step);
+        } else {
+          milkAnimationFrame = null;
+          if (typeof onComplete === 'function') {
+            onComplete();
+          }
+        }
+      }
+
+      milkAnimationFrame = requestAnimationFrame(step);
     }
 
     coffeeRange.addEventListener('input', (event) => {
-      cancelAnimationFrame(animationFrame);
-      updateFillHeight(event.target.value);
+      cancelAnimations();
+      coffeeRange.value = event.target.value;
+      updateLiquids();
+    });
+
+    milkKnob.addEventListener('input', (event) => {
+      cancelAnimations();
+      updateKnobVisual(event.target.value);
+      updateLiquids();
     });
 
     helpButton.addEventListener('click', () => {
@@ -367,29 +793,33 @@
       helpButton.setAttribute('aria-expanded', willShow ? 'true' : 'false');
     });
 
-    milkButton.addEventListener('click', () => {
-      setMilkState(!milkAdded);
-    });
-
     fillButton.addEventListener('click', () => {
-      animateFillTo(100);
-    });
-
-    previewButton.addEventListener('click', () => {
-      cancelAnimationFrame(animationFrame);
-      setMilkState(false);
-      coffeeRange.value = 0;
-      updateFillHeight(0);
-
-      animateFillTo(70, 2000, () => {
-        setTimeout(() => {
-          setMilkState(true);
-          animateFillTo(85, 900);
-        }, 250);
+      cancelAnimations();
+      animateCoffeeTo(78, 2200, () => {
+        animateMilkTo(22, 1200);
       });
     });
 
-    updateFillHeight(0);
+    previewButton.addEventListener('click', () => {
+      cancelAnimations();
+      coffeeRange.value = 0;
+      milkKnob.value = 0;
+      updateKnobVisual(0);
+      updateLiquids();
+
+      animateCoffeeTo(60, 1800, () => {
+        queueTimeout(() => {
+          animateMilkTo(24, 1100, () => {
+            queueTimeout(() => {
+              animateCoffeeTo(68, 900);
+            }, 320);
+          });
+        }, 200);
+      });
+    });
+
+    updateKnobVisual();
+    updateLiquids();
   </script>
 </body>
 </html>
